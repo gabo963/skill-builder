@@ -1,6 +1,7 @@
 ---
 name: skill-builder
 description: Creates and validates Claude Code skill folders with guided workflows, quality checks, and iterative refinement. Handles both new skill creation (full scaffolding) and existing skill validation/improvement. Use when user says "create a skill", "new skill", "build a skill", "check my skill", "validate skill", "fix my SKILL.md", or "improve my skill".
+compatibility: Requires Python 3.8+. Scripts use only the standard library (no pip dependencies).
 ---
 
 # Skill Builder
@@ -183,7 +184,7 @@ If the user provides reference content directly, write it to the appropriate fil
 Use the scaffolder script for deterministic setup:
 
 ```bash
-python scripts/init_skill.py {skill-name} --path {output-directory}
+python3 scripts/init_skill.py {skill-name} --path {output-directory}
 ```
 
 Then tailor the generated folder structure to match actual needs:
@@ -191,11 +192,11 @@ Then tailor the generated folder structure to match actual needs:
 ```
 {skill-name}/
 ├── SKILL.md
-├── references/            # Created if references were identified in 4E
+├── references/            # Always created by scaffolder; remove if unused
 │   └── {reference files}
-├── scripts/               # Created if scripts are referenced in instructions
+├── scripts/               # Always created by scaffolder; remove if unused
 │   └── {script files}
-└── assets/                # Created if assets are referenced
+└── assets/                # Always created by scaffolder; remove if unused
     └── {asset files}
 ```
 
@@ -229,7 +230,7 @@ Then proceed to **Step 6: Validate**.
 Run deterministic validation first, then the full checklist:
 
 ```bash
-python scripts/quick_validate.py {path-to-skill-folder}
+python3 scripts/quick_validate.py {path-to-skill-folder}
 ```
 
 After script validation passes, run the **full validation checklist** against the skill for structural compliance and content quality.
@@ -299,7 +300,7 @@ Do NOT present results to the user until all checks pass (or the 5-iteration lim
 When validation is clean, produce a distributable archive:
 
 ```bash
-python scripts/package_skill.py {path-to-skill-folder} [optional-output-dir]
+python3 scripts/package_skill.py {path-to-skill-folder} [optional-output-dir]
 ```
 
 Packaging must fail closed: if validation fails, do not produce a `.skill` file.

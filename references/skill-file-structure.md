@@ -29,4 +29,4 @@ your-skill-name/
 
 - Don't include README.md inside your skill folder
 - All documentation goes in SKILL.md or references/
-- Note: when distributing via GitHub, you'll still want a repo-level README for human users — see Distribution and Sharing.
+- Note: when distributing via GitHub, you'll still want a repo-level README for human users — but it must live at the repository root, outside the skill folder.

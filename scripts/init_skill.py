@@ -17,11 +17,11 @@ description: [TODO: Explain what this skill does. Include concrete trigger phras
 
 # Instructions
 
-## Step 1: [First Step]
+### Step 1: [First Step]
 
 [TODO: Add specific, actionable instructions.]
 
-## Step 2: [Second Step]
+### Step 2: [Second Step]
 
 [TODO: Add specific, actionable instructions.]
 
