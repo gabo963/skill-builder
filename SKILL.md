@@ -109,6 +109,8 @@ Validate the data before proceeding.
 ```
 
 For exhaustive guidance on writing instructions, consult `references/main-instructions.md`.
+For workflow patterns, consult `references/workflows.md`.
+For output templates and consistency patterns, consult `references/output-patterns.md`.
 
 #### 4B: Examples
 
@@ -178,7 +180,13 @@ If the user provides reference content directly, write it to the appropriate fil
 
 ### Step 5: Scaffold Folder
 
-Create the full folder structure:
+Use the scaffolder script for deterministic setup:
+
+```bash
+python scripts/init_skill.py {skill-name} --path {output-directory}
+```
+
+Then tailor the generated folder structure to match actual needs:
 
 ```
 {skill-name}/
@@ -218,7 +226,13 @@ Then proceed to **Step 6: Validate**.
 
 ### Step 6: Validate
 
-Run the **full validation checklist** against the skill. Check both structural compliance and content quality.
+Run deterministic validation first, then the full checklist:
+
+```bash
+python scripts/quick_validate.py {path-to-skill-folder}
+```
+
+After script validation passes, run the **full validation checklist** against the skill for structural compliance and content quality.
 
 #### Structural Checks
 
@@ -280,7 +294,17 @@ After running validation:
 
 Do NOT present results to the user until all checks pass (or the 5-iteration limit is reached).
 
-### Step 8: Present Summary
+### Step 8: Package
+
+When validation is clean, produce a distributable archive:
+
+```bash
+python scripts/package_skill.py {path-to-skill-folder} [optional-output-dir]
+```
+
+Packaging must fail closed: if validation fails, do not produce a `.skill` file.
+
+### Step 9: Present Summary
 
 Show the user:
 
