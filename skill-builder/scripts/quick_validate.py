@@ -18,6 +18,31 @@ ALLOWED_KEYS = {
 }
 
 PATH_PREFIXES = ("references/", "scripts/", "assets/")
+ALLOWED_DIRS = {"references", "scripts", "assets"}
+
+# Map common misnomers to the correct directory name
+DIR_SUGGESTIONS: dict[str, str] = {
+    "docs": "references",
+    "doc": "references",
+    "documentation": "references",
+    "resources": "references",
+    "ref": "references",
+    "refs": "references",
+    "guides": "references",
+    "src": "scripts",
+    "source": "scripts",
+    "bin": "scripts",
+    "lib": "scripts",
+    "tools": "scripts",
+    "utils": "scripts",
+    "static": "assets",
+    "images": "assets",
+    "img": "assets",
+    "templates": "assets",
+    "media": "assets",
+    "files": "assets",
+    "data": "assets",
+}
 
 
 def _extract_frontmatter(content: str) -> str:
@@ -100,6 +125,40 @@ def validate_skill(skill_dir: Path) -> tuple[bool, list[str]]:
 
     if (skill_dir / "README.md").exists():
         errors.append("README.md should not exist in a skill folder")
+
+    # Detect non-allowed directories in the skill root
+    for entry in sorted(skill_dir.iterdir()):
+        if not entry.is_dir() or entry.name.startswith("."):
+            continue
+        if entry.name not in ALLOWED_DIRS:
+            suggestion = DIR_SUGGESTIONS.get(entry.name.lower())
+            if suggestion:
+                errors.append(
+                    f"Non-allowed directory '{entry.name}/' in skill root"
+                    f" — rename to {suggestion}/"
+                )
+            else:
+                errors.append(
+                    f"Non-allowed directory '{entry.name}/' in skill root"
+                    f" — only references/, scripts/, and assets/ are permitted"
+                )
+
+    # Detect misplaced files in the skill root
+    SCRIPT_EXTENSIONS = {".py", ".sh", ".bash"}
+    IGNORED_ROOT_FILES = {"SKILL.md", "README.md", "LICENSE"}
+    for entry in sorted(skill_dir.iterdir()):
+        if entry.is_dir() or entry.name.startswith("."):
+            continue
+        if entry.name in IGNORED_ROOT_FILES:
+            continue
+        if entry.suffix == ".md":
+            errors.append(
+                f"Misplaced file '{entry.name}' in skill root — move to references/"
+            )
+        elif entry.suffix in SCRIPT_EXTENSIONS:
+            errors.append(
+                f"Misplaced file '{entry.name}' in skill root — move to scripts/"
+            )
 
     content = skill_md.read_text(encoding="utf-8")
     try:

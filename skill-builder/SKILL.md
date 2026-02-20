@@ -218,6 +218,12 @@ Then proceed to **Step 6: Validate**.
 2. If found, read the full `SKILL.md` and scan the folder structure (`references/`, `scripts/`, `assets/`)
 3. If NOT found, ask the user for the path to their skill folder
 4. If the path also has no `SKILL.md`, offer to create a new skill instead
+5. Scan for misplaced files in the skill root: any `.md` files (other than `SKILL.md`) should be moved to `references/`, and any `.py`/`.sh`/`.bash` scripts should be moved to `scripts/`. Relocate them before proceeding.
+6. Scan for non-allowed directories: only `references/`, `scripts/`, and `assets/` (plus hidden dotfile dirs like `.claude/`) are permitted in the skill root. If any other directory exists (e.g. `resources/`, `docs/`, `src/`, `templates/`), rename or merge it into the correct allowed directory. Common mappings:
+   - `resources/`, `docs/`, `documentation/`, `guides/`, `ref/`, `refs/` → `references/`
+   - `src/`, `source/`, `bin/`, `lib/`, `tools/`, `utils/` → `scripts/`
+   - `static/`, `images/`, `img/`, `templates/`, `media/`, `files/`, `data/` → `assets/`
+   If the target directory already exists, merge the contents. Then update any references in SKILL.md to point to the new paths.
 
 Then proceed to **Step 6: Validate**.
 
@@ -251,6 +257,8 @@ After script validation passes, run the **full validation checklist** against th
 - [ ] `SKILL.md` file exists with exact casing (not `skill.md` or `SKILL.MD`)
 - [ ] Skill folder name is kebab-case
 - [ ] No `README.md` inside the skill folder
+- [ ] No misplaced files in skill root (`.md` files belong in `references/`, scripts in `scripts/`)
+- [ ] No non-allowed directories in skill root (only `references/`, `scripts/`, `assets/`, and hidden dotfile dirs are permitted)
 - [ ] `references/` directory exists if referenced in instructions
 - [ ] `scripts/` directory exists if scripts are referenced
 - [ ] `assets/` directory exists if assets are referenced
